@@ -1,0 +1,1 @@
+crear product, comoponenete crear product si el usuario es admin y crear el logueo
