@@ -15,13 +15,18 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import { getSuppliers } from "api";
 import { getProducts } from "api";
 import { FormProduct } from "components/FormProduct/form";
+import { FormSupplier } from "components/FormSupplier/form";
+import { getToken } from "functions";
 import { useSetProducts } from "hooks";
+import { useSetStatsFormSupplier } from "hooks";
+import { useSetSuppliers } from "hooks";
 import { useSetStatsFormProduct } from "hooks";
-import { useGetValueRolUser } from "hooks";
+import { useGetValueUser } from "hooks";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -35,22 +40,32 @@ import {
 } from "reactstrap";
 
 function ProductsList() {
+  const token = getToken();
   const [products, setProducts] = useSetProducts();
+  const [suppliers, setSuppliers] = useSetSuppliers();
   const [stateForm, setStateForm] = useSetStatsFormProduct();
-  const user = useGetValueRolUser();
+  const [stateFormSupplier, setStateFormSupplier] = useSetStatsFormSupplier();
+  const user = useGetValueUser();
+  const navigateTo = useNavigate();
 
   useEffect(() => {
     async function loadData() {
-      const productsFromDB = await getProducts();
+      const productsFromDB = await getProducts(token);
+      const suppliersFromDB = await getSuppliers(token);
       console.log(productsFromDB);
+      setSuppliers(suppliersFromDB);
       setProducts(productsFromDB);
     }
     loadData();
-  }, [products]);
+  }, [stateForm, stateFormSupplier]);
 
   const handleActiveForm = () => {
     if (stateForm == false) setStateForm(true);
     else setStateForm(false);
+  };
+  const handleActiveFormSupplier = () => {
+    if (stateFormSupplier == false) setStateFormSupplier(true);
+    else setStateFormSupplier(false);
   };
   console.log("products", products);
   return (
@@ -62,7 +77,9 @@ function ProductsList() {
               <CardHeader>
                 <CardTitle tag="h4">Productos</CardTitle>
                 {user.rol == "admin" ? (
-                  <Link onClick={handleActiveForm}>Add product</Link>
+                  <Link className="text-center" onClick={handleActiveForm}>
+                    {stateForm == true ? "Close" : "Add product"}
+                  </Link>
                 ) : null}
 
                 {stateForm == true ? <FormProduct /> : null}
@@ -81,11 +98,17 @@ function ProductsList() {
                   <tbody>
                     {products?.map((prod) => {
                       return (
-                        <tr key={prod.id}>
+                        <tr
+                          key={prod.id}
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            navigateTo("/admin/product/" + prod.id)
+                          }
+                        >
                           <td>{prod.title}</td>
                           <td>{prod.supplierName}</td>
                           <td>{prod.stock}</td>
-                          <td>{prod.categorie}</td>
+                          <td className="text-center">{prod.categoriesName}</td>
                           <td className="text-center">${prod.price}</td>
                         </tr>
                       );
@@ -98,62 +121,46 @@ function ProductsList() {
           <Col md="12">
             <Card className="card-plain">
               <CardHeader>
-                <CardTitle tag="h4">Table on Plain Background</CardTitle>
+                <CardTitle tag="h4">Suppliers</CardTitle>
                 <p className="category">Here is a subtitle for this table</p>
+                {user.rol == "admin" ? (
+                  <Link
+                    className="text-center"
+                    onClick={handleActiveFormSupplier}
+                  >
+                    {stateFormSupplier == true ? "Close" : "Add supplier"}
+                  </Link>
+                ) : null}
+
+                {stateFormSupplier == true ? <FormSupplier /> : null}
               </CardHeader>
               <CardBody>
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
                       <th>Name</th>
-                      <th>Country</th>
-                      <th>City</th>
-                      <th className="text-center">Salary</th>
+                      <th>Description</th>
+                      <th>Cellphone</th>
+                      <th className="text-center">Email</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Dakota Rice</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                      <td className="text-center">$36,738</td>
-                    </tr>
-                    <tr>
-                      <td>Minerva Hooper</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                      <td className="text-center">$23,789</td>
-                    </tr>
-                    <tr>
-                      <td>Sage Rodriguez</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                      <td className="text-center">$56,142</td>
-                    </tr>
-                    <tr>
-                      <td>Philip Chaney</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td className="text-center">$38,735</td>
-                    </tr>
-                    <tr>
-                      <td>Doris Greene</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                      <td className="text-center">$63,542</td>
-                    </tr>
-                    <tr>
-                      <td>Mason Porter</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$78,615</td>
-                    </tr>
-                    <tr>
-                      <td>Jon Porter</td>
-                      <td>Portugal</td>
-                      <td>Gloucester</td>
-                      <td className="text-center">$98,615</td>
-                    </tr>
+                    {suppliers?.map((supplier) => {
+                      return (
+                        <tr
+                          key={supplier.id}
+                          style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            navigateTo("/admin/supplier/" + supplier.id)
+                          }
+                        >
+                          <td>{supplier.name}</td>
+                          <td>{supplier.description}</td>
+                          <td>{supplier.cellphone}</td>
+                          <td className="text-center">{supplier.email}</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </CardBody>

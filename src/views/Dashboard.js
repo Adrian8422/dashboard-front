@@ -16,6 +16,7 @@
 
 */
 import React, { useEffect, useState } from "react";
+import addIcon from "../assets/customIcons/icons8-add-50.png";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
@@ -50,20 +51,87 @@ import {
   chartExample4,
 } from "variables/charts.js";
 import { getProducts } from "api";
+import { getToken } from "functions";
+import { useGetProducts } from "hooks";
+import { useSetTasks } from "hooks";
+import { getTasks } from "api";
+
+import { useSetStatusFormTask } from "hooks";
+import { useNavigate } from "react-router-dom";
+import { FormTask } from "components/FormTask";
+import { deleteTaskId } from "api";
+import { deleteManyTask } from "api";
 
 function Dashboard(props) {
+  const [selectedTasks, setSelectedTasks] = useState({});
+  const navigateTo = useNavigate();
+  const [tasks, setTasks] = useSetTasks();
+  const [statusButtonDelete, setStatusButtonDelete] = useState(false);
+  const token = getToken();
   const [bigChartData, setbigChartData] = React.useState("data1");
   const [products, setProducts] = useState([]);
+  const [stateFormTask, setStateFormTask] = useSetStatusFormTask();
+
   useEffect(() => {
     async function loadData() {
-      const productsFromDB = await getProducts();
+      const productsFromDB = await getProducts(token);
+      const tasksFromDB = await getTasks(token);
+      if (!Object.values(selectedTasks).some((isSelected) => isSelected)) {
+        setSelectedTasks({});
+      }
+      setTasks(tasksFromDB);
       console.log(productsFromDB);
       setProducts(productsFromDB);
     }
     loadData();
-  }, []);
+  }, [stateFormTask, statusButtonDelete]);
   const setBgChartData = (name) => {
     setbigChartData(name);
+  };
+  const handleCheckboxChange = (taskId) => {
+    setSelectedTasks((prevSelectedTasks) => ({
+      ...prevSelectedTasks,
+      [taskId]: !prevSelectedTasks[taskId],
+    }));
+  };
+  const hasSelectedTasks = Object.values(selectedTasks).some(
+    (isSelected) => isSelected
+  );
+  const handleDeleteClick = async () => {
+    // Obtén un array de objetos con el número de ID y el booleano de selección
+    const selectedItemsArray = Object.entries(selectedTasks).map(
+      ([id, isSelected]) => ({
+        id: parseInt(id, 10), // Convierte el id a número
+        isSelected,
+      })
+    );
+    const IdsItemToDelete = selectedItemsArray
+      .filter((item) => item.isSelected === true)
+      .map((item) => item.id);
+    console.log("IDS TO DELETE", IdsItemToDelete);
+
+    if (statusButtonDelete == false) setStatusButtonDelete(true);
+    else setStatusButtonDelete(false);
+    await deleteManyTask(token, IdsItemToDelete);
+    alert("Deleted");
+
+    // selectedItemsArray.forEach(async (item) => {
+    //   if (item.isSelected == true) {
+    // await deleteTaskId(token, item.id);
+    // console.log("ITEMS", item);
+    ////ver COMO ACTUALIZAR PARA QUE SE CARGUEN LAS TASKS ACTUALIZADAS YA QUE FUERON BORRADAS ALGUNAS, TAMBIEN MODIFICAR PARA QUE NO HAGA MUCHAS PETICIONES, SINO QUE DIRECTAMENTE BORRE CON UN ARRAY DE ID Y CON UNA SOLA PETICION BORRE LAS TAREAS SELECCIONADAS
+  };
+  // });
+  // selectedItemsArray.
+
+  // console.log("Eliminar tareas:", selectedItemsArray);
+
+  // Implementa la lógica de eliminación aquí usando selectedItemsArray
+  // };
+
+  const activeFormTask = () => {
+    if (stateFormTask == false) setStateFormTask(true);
+    else setStateFormTask(false);
   };
   return (
     <>
@@ -207,11 +275,27 @@ function Dashboard(props) {
         </Row>
         <Row>
           <Col lg="6" md="12">
-            <Card className="card-tasks">
+            <Card id="tasks" className="card-tasks">
               <CardHeader>
                 <h6 className="title d-inline">Tasks(5)</h6>
                 <p className="card-category d-inline"> today</p>
-                <UncontrolledDropdown>
+                <UncontrolledDropdown style={{ display: "flex" }}>
+                  {hasSelectedTasks && (
+                    <p
+                      onClick={handleDeleteClick}
+                      style={{ color: "red", marginRight: "25px" }}
+                    >
+                      Delete
+                    </p>
+                  )}
+                  <div style={{ display: "flex", width: "20px" }}>
+                    <img
+                      onClick={activeFormTask}
+                      style={{ height: "20px" }}
+                      src={addIcon}
+                      alt="Icono personalizado"
+                    />
+                  </div>
                   <DropdownToggle
                     caret
                     className="btn-icon"
@@ -245,228 +329,60 @@ function Dashboard(props) {
               </CardHeader>
               <CardBody>
                 <div className="table-full-width table-responsive">
+                  {stateFormTask == false ? null : <FormTask />}
                   <Table>
                     <tbody>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">Update the Documentation</p>
-                          <p className="text-muted">
-                            Dwuamish Head, Seattle, WA 8:47 AM
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip636901683"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip636901683"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">GDPR Compliance</p>
-                          <p className="text-muted">
-                            The GDPR is a regulation that requires businesses to
-                            protect the personal data and privacy of Europe
-                            citizens for transactions that occur within EU
-                            member states.
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip457194718"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip457194718"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">Solve the issues</p>
-                          <p className="text-muted">
-                            Fifty percent of all respondents said they would be
-                            more likely to shop at a company
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip362404923"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip362404923"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">Release v2.0.0</p>
-                          <p className="text-muted">
-                            Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip818217463"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip818217463"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">Export the processed files</p>
-                          <p className="text-muted">
-                            The report also shows that consumers will not easily
-                            forgive a company once a breach exposing their
-                            personal data occurs.
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip831835125"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip831835125"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <FormGroup check>
-                            <Label check>
-                              <Input defaultValue="" type="checkbox" />
-                              <span className="form-check-sign">
-                                <span className="check" />
-                              </span>
-                            </Label>
-                          </FormGroup>
-                        </td>
-                        <td>
-                          <p className="title">Arival at export process</p>
-                          <p className="text-muted">
-                            Capitol Hill, Seattle, WA 12:34 AM
-                          </p>
-                        </td>
-                        <td className="td-actions text-right">
-                          <Button
-                            color="link"
-                            id="tooltip217595172"
-                            title=""
-                            type="button"
-                          >
-                            <i className="tim-icons icon-pencil" />
-                          </Button>
-                          <UncontrolledTooltip
-                            delay={0}
-                            target="tooltip217595172"
-                            placement="right"
-                          >
-                            Edit Task
-                          </UncontrolledTooltip>
-                        </td>
-                      </tr>
+                      {
+                        /* ///////////////////////// AQUIIIIIIII MAPEAR */
+
+                        tasks?.map((task) => {
+                          return (
+                            <tr key={task.id}>
+                              <td>
+                                <FormGroup check>
+                                  <Label check>
+                                    <Input
+                                      defaultValue={task.done}
+                                      type="checkbox"
+                                      checked={selectedTasks[task.id] || false}
+                                      onChange={() =>
+                                        handleCheckboxChange(task.id)
+                                      }
+                                    />
+                                    <span className="form-check-sign">
+                                      <span className="check" />
+                                    </span>
+                                  </Label>
+                                </FormGroup>
+                              </td>
+                              <td>
+                                <p className="title">{task.title}</p>
+                                <p className="text-muted">{task.description}</p>
+                              </td>
+                              <td className="td-actions text-right">
+                                <Button
+                                  color="link"
+                                  id="tooltip636901683"
+                                  title=""
+                                  type="button"
+                                  onClick={() =>
+                                    navigateTo("/admin/task/" + task.id)
+                                  }
+                                >
+                                  <i className="tim-icons icon-pencil" />
+                                </Button>
+                                <UncontrolledTooltip
+                                  delay={0}
+                                  target="tooltip636901683"
+                                  placement="right"
+                                >
+                                  Edit Task
+                                </UncontrolledTooltip>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      }
                     </tbody>
                   </Table>
                 </div>

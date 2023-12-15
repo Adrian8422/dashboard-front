@@ -17,6 +17,10 @@
 */
 import { updateDataUser } from "api";
 import { getDataUser } from "api";
+import { getToken } from "functions";
+import { useSetUser } from "hooks";
+import { useGetValueUser } from "hooks";
+
 import { useSetRolUser } from "hooks";
 import React, { useEffect, useState } from "react";
 
@@ -36,14 +40,17 @@ import {
 } from "reactstrap";
 
 function UserProfile() {
-  const [user, setUser] = useState({});
+  // const user = useGetValueUser();
+  const [user, setUser] = useSetUser();
+  const token = getToken();
+
   // AHORA LO HAGO ACA AL SETEO DEL ROL AL USER EN RECOIL PERO LUEGO HACERLA EN EL login
 
-  const [userRecoil, setUserRecoil] = useSetRolUser();
+  // const [userRecoil, setUserRecoil] = useSetRolUser();
   useEffect(() => {
     async function loadData() {
-      const data = await getDataUser();
-      setUserRecoil({ email: data.email, rol: data.rol });
+      const data = await getDataUser(token);
+      // setUserRecoil({ email: data.email, rol: data.rol });
       setUser(data);
     }
     loadData();
@@ -54,9 +61,10 @@ function UserProfile() {
     const name = e.target.name.value;
     const lastname = e.target.lastname.value;
     const data = { name, lastname };
-    const updateData = await updateDataUser(data);
+    console.log("datata", data);
+    const updateData = await updateDataUser(token, data);
     if (updateData) {
-      const updatedData = await getDataUser();
+      const updatedData = await getDataUser(token);
       setUser(updatedData);
 
       alert("Updated succcessfully");

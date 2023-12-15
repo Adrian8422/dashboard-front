@@ -1,1 +1,22 @@
 crear product, comoponenete crear product si el usuario es admin y crear el logueo
+
+
+utilizar bien el hook del token y usarlo en las consultas de la api
+
+quitar el gettoken de api y pasarlo esiempre desde el functional componenet react
+
+
+
+crear tabla de supplier crud supplier
+crear ventas crud de ventas
+crud tasks 
+notificaciones
+
+
+VER PORQUE SE ABREN LOS DOS FORMULARIOS CUANDO CLICEO ADD PRODUCTO Y ADD SUPPLIERS, ARREGLARLO .. DONEEE
+
+
+Agregar el button add tasks e implementar el crud de tasks en el frontend
+
+
+en el endpoint delete task backend, tengo que implementar que pueda recibir un array de varios id para poder eliminar uno o varios a la ves

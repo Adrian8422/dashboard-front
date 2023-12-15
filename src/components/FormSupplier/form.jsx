@@ -5,29 +5,28 @@ import { createProduct } from "api"
 import { useSetStatsFormProduct } from "hooks"
 import { useGetValueUser } from "hooks"
 import { getToken } from "functions"
+import { useSetStatsFormSupplier } from "hooks"
+import { createSupplier } from "api"
 
-export function FormProduct() {
+export function FormSupplier() {
     const rolUser = useGetValueUser()
     const token = getToken();
-    const [stateForm, setStateForm] = useSetStatsFormProduct();
+    const [stateFormSupplier, setStateFormSupplier] = useSetStatsFormSupplier();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const title = e.target.title.value
+        const name = e.target.name.value
         const description = e.target.description.value
-        const price = e.target.price.value
-        const stock = e.target.stock.value
-        const supplierName = e.target.supplierName.value
-        const categorieName = e.target.categorieName.value
-        console.log("DATOS", title, description, price, stock, supplierName, categorieName)
-        const dataBody = {
-            title, description, price, stock, supplierName, categorieName
-        }
+        const cellphone = e.target.cellphone.value
+        const email = e.target.email.value
+     
+    const dataBody = {
+        name,description,cellphone,email
+    }
 
-
-        await createProduct(token,dataBody)
-        setStateForm(false)
-        alert("Created product")
+        await createSupplier(token,dataBody)
+        setStateFormSupplier(false)
+        alert("Created supplier")
     }
 
     return (
@@ -35,9 +34,9 @@ export function FormProduct() {
             <Form onSubmit={handleSubmit}>
                 <Label htmlFor="">
                     <Input
-                        name="title"
+                        name="name"
                         // defaultValue={user.lastname}
-                        placeholder="Title"
+                        placeholder="Name"
                         type="text"
                     />
                 </Label>
@@ -45,17 +44,12 @@ export function FormProduct() {
                     <Input className="pd-2" type="text" name="description" placeholder="Description" />
                 </Label>
                 <Label htmlFor="">
-                    <Input type="number" name="price" placeholder="price" />
+                    <Input type="number" name="cellphone" placeholder="Cellphone" />
                 </Label>
                 <Label htmlFor="">
-                    <Input type="number" name="stock" placeholder="stock" />
+                    <Input type="text   " name="email" placeholder="Email" />
                 </Label>
-                <Label htmlFor="">
-                    <Input type="text" name="supplierName" placeholder="supplier" />
-                </Label>
-                <Label htmlFor="">
-                    <Input type="text" name="categorieName" placeholder="Categorie" />
-                </Label>
+               
                 {rolUser == 'client' ? null : 
                 <Button className="btn-fill" color="primary" type="submit">
                     Save

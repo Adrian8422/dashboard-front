@@ -23,16 +23,21 @@ import Rtl from "views/Rtl.js";
 import ProductsList from "views/ProductsList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
+import { PageLog } from "views/LogUser";
+import Product from "views/Product";
+import Supplier from "views/Supplier";
+import Task from "views/Task";
 
 var routes = [
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: "/login",
+    name: "Login",
     rtlName: "لوحة القيادة",
     icon: "tim-icons icon-chart-pie-36",
-    component: <Dashboard />,
+    component: <PageLog />,
     layout: "/admin",
   },
+
   {
     path: "/icons",
     name: "Icons",
@@ -74,6 +79,14 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/product/:id",
+    name: "Product",
+    rtlName: "قائمة الجدول",
+    icon: "tim-icons icon-puzzle-10",
+    component: <Product />,
+    layout: "/admin",
+  },
+  {
     path: "/typography",
     name: "Typography",
     rtlName: "طباعة",
@@ -88,6 +101,30 @@ var routes = [
     icon: "tim-icons icon-world",
     component: <Rtl />,
     layout: "/rtl",
+  },
+  {
+    path: "/supplier/:id",
+    name: "RTL Support",
+    rtlName: "ار تي ال",
+    icon: "tim-icons icon-world",
+    component: <Supplier />,
+    layout: "/admin",
+  },
+  {
+    path: "/task/:id",
+    name: "RTL Support",
+    rtlName: "ار تي ال",
+    icon: "tim-icons icon-world",
+    component: <Task />,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: "tim-icons icon-chart-pie-36",
+    component: <Dashboard />,
+    layout: "/admin",
   },
 ];
 export default routes;

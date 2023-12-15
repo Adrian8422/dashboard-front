@@ -15,6 +15,10 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
+const { getSalesPerDay } = require("api");
+const { getSalesPerMonth } = require("api");
+
 // ##############################
 // // // Chart variables
 // #############################
@@ -115,9 +119,10 @@ let chartExample1 = {
       ],
     };
   },
-  data2: (canvas) => {
+  data2: async (canvas) => {
     let ctx = canvas.getContext("2d");
-
+    const sales = await getSalesPerMonth();
+    console.log("como llega?", sales);
     let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, "rgba(29,140,248,0.2)");
@@ -155,7 +160,8 @@ let chartExample1 = {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
+          // data: Object.values(sales).map((monthData) => monthData.length),
+          data: Object.values(sales).map((monthData) => monthData.length),
         },
       ],
     };
@@ -251,9 +257,13 @@ let chartExample2 = {
 // // // used inside src/views/Dashboard.js
 // #########################################
 let chartExample3 = {
-  data: (canvas) => {
+  data: async (canvas) => {
+    const salesPerDay = await getSalesPerDay();
+    let arraySales = [];
     let ctx = canvas.getContext("2d");
+    salesPerDay.map((sale) => arraySales.push(sale.sales));
 
+    console.log("array", arraySales);
     let gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
 
     gradientStroke.addColorStop(1, "rgba(72,72,176,0.1)");
@@ -272,7 +282,7 @@ let chartExample3 = {
           borderWidth: 2,
           borderDash: [],
           borderDashOffset: 0.0,
-          data: [53, 20, 10, 80, 100, 45],
+          data: arraySales,
         },
       ],
     };

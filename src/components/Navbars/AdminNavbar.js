@@ -38,8 +38,13 @@ import {
   NavbarToggler,
   ModalHeader,
 } from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { useGetValueUser } from "hooks";
+import { useSetUser } from "hooks";
 
 function AdminNavbar(props) {
+  const navigateTo = useNavigate();
+  const [dataUser, setDataUser] = useSetUser();
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
@@ -70,6 +75,18 @@ function AdminNavbar(props) {
   // this function is to open the Search modal
   const toggleModalSearch = () => {
     setmodalSearch(!modalSearch);
+  };
+
+  const handleLogOut = async (e) => {
+    e.preventDefault();
+
+    setDataUser("");
+
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("data_user");
+
+    navigateTo("/login");
+    // alert("Deslogueado");
   };
   return (
     <>
@@ -154,7 +171,9 @@ function AdminNavbar(props) {
                     <img alt="..." src={require("assets/img/anime3.png")} />
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />
-                  <p className="d-lg-none">Log out</p>
+                  <p onClick={handleLogOut} className="d-lg-none">
+                    Log out
+                  </p>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
@@ -165,7 +184,9 @@ function AdminNavbar(props) {
                   </NavLink>
                   <DropdownItem divider tag="li" />
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Log out</DropdownItem>
+                    <DropdownItem onClick={handleLogOut} className="nav-item">
+                      Log out
+                    </DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
