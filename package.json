@@ -21,15 +21,7 @@
     "sass": "1.62.1",
     "styled-components": "^6.1.0"
   },
-  "scripts": {
-    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
-    "build": "react-scripts build && gulp licenses",
-    "start": "react-scripts start",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "compile-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
-    "minify-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.min.css --style compressed"
-  },
+
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
@@ -48,5 +40,15 @@
   },
   "overrides": {
     "svgo": "3.0.2"
+  },
+  "scripts": {
+   
+    "install:clean": "yarn",
+    "build": "react-scripts build && gulp licenses",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "compile-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
+    "minify-scss": "sass src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.min.css --style compressed"
   }
 }
