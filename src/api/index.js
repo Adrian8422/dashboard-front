@@ -1,7 +1,8 @@
 import { getToken } from "functions";
 import { savedToken } from "functions";
 
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://dashboard-back-0dzj.onrender.com";
 
 const token = getToken();
 
