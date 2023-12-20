@@ -2,20 +2,21 @@
   "name": "black-dashboard-react",
   "version": "1.2.2",
   "private": true,
-  "homepage": "https://demos.creative-tim.com/black-dashboard-react/#/admin/dashboard",
+  "homepage": "/",
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.4.0",
-    "bootstrap": "4.6.2",
+    "bootstrap": "^4.6.2",
     "chart.js": "3.9.1",
     "classnames": "2.3.2",
     "perfect-scrollbar": "1.5.5",
     "prop-types": "15.8.1",
     "react": ">=16.8.0",
-    "react-chartjs-2": "3.3.0",
+    "react-chartjs-2": "^3.3.0",
     "react-dom": ">=16.8.0",
-    "react-notification-alert": "0.0.13",
+    "react-notification-alert": "^0.0.13",
     "react-router-dom": "6.11.1",
     "react-scripts": "5.0.1",
+    "reactstrap": "^8.10.1",
     "recoil": "^0.7.7",
     "recoil-persist": "^5.1.0",
     "sass": "1.62.1",
@@ -35,6 +36,7 @@
     "reactstrap": "8.10.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-private-property-in-object": "^7.23.4",
     "typescript": "5.0.4"
   },
