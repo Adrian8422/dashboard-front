@@ -42,8 +42,7 @@
     "svgo": "3.0.2"
   },
   "scripts": {
-   
-    
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "build": "react-scripts build && gulp licenses",
     "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
