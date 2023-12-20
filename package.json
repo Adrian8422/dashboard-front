@@ -43,7 +43,7 @@
   },
   "scripts": {
    
-    "install:clean": "yarn",
+    
     "build": "react-scripts build && gulp licenses",
     "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
