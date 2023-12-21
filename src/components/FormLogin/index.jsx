@@ -54,7 +54,7 @@ export function FormLog() {
     // navigateTo('/dashboard')
   };
   return (
-    <Row>
+    <Row style={{justifyContent:"center"}}>
         <ContainerForm>
         
           {stateFormCode == false ?    

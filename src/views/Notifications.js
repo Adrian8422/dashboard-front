@@ -94,9 +94,7 @@ function Notifications() {
                 </UncontrolledAlert>
                 <UncontrolledAlert className="alert-with-icon" color="info">
                   <span className="tim-icons icon-bell-55" data-notify="icon" />
-                  <span data-notify="message">
-                    This is a notification with close button and icon.
-                  </span>
+                  <span data-notify="message">notificaion</span>
                 </UncontrolledAlert>
                 <UncontrolledAlert className="alert-with-icon" color="info">
                   <span className="tim-icons icon-bell-55" data-notify="icon" />

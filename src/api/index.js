@@ -323,3 +323,18 @@ export async function deleteManyTask(token, arrayIds) {
 
   return json;
 }
+
+export async function getNotifications(token) {
+  const res = await fetch(BASE_URL + "/notifications", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      authorization: `bearer ${token}`,
+    },
+  });
+  // console.log("response", res);
+  const json = await res.json();
+  console.log("notifications", json);
+
+  return json;
+}

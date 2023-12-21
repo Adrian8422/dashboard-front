@@ -15,8 +15,14 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
@@ -30,15 +36,23 @@ import routes from "routes.js";
 
 import logo from "assets/img/react-logo.png";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+import { getToken } from "functions";
 
 var ps;
 
 function Admin(props) {
+  const navigateTo = useNavigate();
+  const token = getToken();
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
   );
+  useEffect(() => {
+    if (!token) {
+      return navigateTo("/admin/login");
+    }
+  }, [token]);
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
@@ -102,20 +116,23 @@ function Admin(props) {
       {({ color, changeColor }) => (
         <React.Fragment>
           <div className="wrapper">
-            <Sidebar
-              routes={routes}
-              logo={{
-                outterLink: "https://www.creative-tim.com/",
-                text: "Creative Tim",
-                imgSrc: logo,
-              }}
-              toggleSidebar={toggleSidebar}
-            />
+            {token ? (
+              <Sidebar
+                routes={routes}
+                logo={{
+                  outterLink: "https://www.creative-tim.com/",
+                  text: "Creative Tim",
+                  imgSrc: logo,
+                }}
+                toggleSidebar={toggleSidebar}
+              />
+            ) : null}
+
             <div className="main-panel" ref={mainPanelRef} data={color}>
               <AdminNavbar
                 brandText={getBrandText(location.pathname)}
-                toggleSidebar={toggleSidebar}
-                sidebarOpened={sidebarOpened}
+                toggleSidebar={token ? toggleSidebar : null}
+                sidebarOpened={token ? sidebarOpened : null}
               />
               <Routes>
                 {getRoutes(routes)}
