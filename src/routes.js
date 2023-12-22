@@ -85,15 +85,16 @@ var routes = [
     icon: "tim-icons icon-puzzle-10",
     component: <Product />,
     layout: "/admin",
+    hidden: true,
   },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: "tim-icons icon-align-center",
-    component: <Typography />,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/typography",
+  //   name: "Typography",
+  //   rtlName: "طباعة",
+  //   icon: "tim-icons icon-align-center",
+  //   component: <Typography />,
+  //   layout: "/admin",
+  // },
   {
     path: "/rtl-support",
     name: "RTL Support",
@@ -109,6 +110,7 @@ var routes = [
     icon: "tim-icons icon-world",
     component: <Supplier />,
     layout: "/admin",
+    hidden: true,
   },
   {
     path: "/task/:id",
@@ -117,6 +119,7 @@ var routes = [
     icon: "tim-icons icon-world",
     component: <Task />,
     layout: "/admin",
+    hidden: true,
   },
   {
     path: "/dashboard",
