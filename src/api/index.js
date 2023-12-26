@@ -338,3 +338,17 @@ export async function getNotifications(token) {
 
   return json;
 }
+export async function getUsers(token) {
+  const res = await fetch(BASE_URL + "/users", {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      authorization: `bearer ${token}`,
+    },
+  });
+  // console.log("response", res);
+  const json = await res.json();
+  console.log("users clients", json);
+
+  return json;
+}

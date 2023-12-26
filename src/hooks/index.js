@@ -30,6 +30,13 @@ const arraySuppliers = atom({
 
 export const useSetSuppliers = () => useRecoilState(arraySuppliers);
 export const useGetSuppliers = () => useRecoilValue(arraySuppliers);
+const arrayUsers = atom({
+  key: "users",
+  default: [],
+});
+
+export const useSetUsers = () => useRecoilState(arrayUsers);
+export const useGetUsers = () => useRecoilValue(arrayUsers);
 
 const arrayTasks = atom({
   key: "tasks",

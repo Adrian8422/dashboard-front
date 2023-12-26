@@ -27,6 +27,7 @@ import { PageLog } from "views/LogUser";
 import Product from "views/Product";
 import Supplier from "views/Supplier";
 import Task from "views/Task";
+import UsersList from "views/Users";
 
 var routes = [
   {
@@ -44,6 +45,14 @@ var routes = [
     rtlName: "الرموز",
     icon: "tim-icons icon-atom",
     component: <Icons />,
+    layout: "/admin",
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    rtlName: "لوحة القيادة",
+    icon: "tim-icons icon-chart-pie-36",
+    component: <Dashboard />,
     layout: "/admin",
   },
   {
@@ -76,6 +85,14 @@ var routes = [
     rtlName: "قائمة الجدول",
     icon: "tim-icons icon-puzzle-10",
     component: <ProductsList />,
+    layout: "/admin",
+  },
+  {
+    path: "/users",
+    name: "Users list",
+    rtlName: "قائمة الجدول",
+    icon: "tim-icons icon-puzzle-10",
+    component: <UsersList />,
     layout: "/admin",
   },
   {
@@ -120,14 +137,6 @@ var routes = [
     component: <Task />,
     layout: "/admin",
     hidden: true,
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: "tim-icons icon-chart-pie-36",
-    component: <Dashboard />,
-    layout: "/admin",
   },
 ];
 export default routes;
