@@ -20,4 +20,4 @@ Agregar el button add tasks e implementar el crud de tasks en el frontend
 
 agregar confirmacion de usuario para registrar un administrador tiene que dar acceso al usuario nuevo, sino este usuario no podra ingressar a la plataforma. Y crear un formulario usuarios para cambiar de roles 
 
-en el endpoint delete task backend, tengo que implementar que pueda recibir un array de varios id para poder eliminar uno o varios a la ves
+en el endpoint delete task backend, tengo que implementar que pueda recibir un array de varios id para poder eliminar uno o varios a la vesver porque no me trae los usuarios

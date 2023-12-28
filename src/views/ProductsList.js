@@ -96,23 +96,31 @@ function ProductsList() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products?.map((prod) => {
-                      return (
-                        <tr
-                          key={prod.id}
-                          style={{ cursor: "pointer" }}
-                          onClick={() =>
-                            navigateTo("/admin/product/" + prod.id)
-                          }
-                        >
-                          <td>{prod.title}</td>
-                          <td>{prod.supplierName}</td>
-                          <td>{prod.stock}</td>
-                          <td className="text-center">{prod.categoriesName}</td>
-                          <td className="text-center">${prod.price}</td>
-                        </tr>
-                      );
-                    })}
+                    {products[0] ? (
+                      products?.map((prod) => {
+                        return (
+                          <tr
+                            key={prod.id}
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              navigateTo("/admin/product/" + prod.id)
+                            }
+                          >
+                            <td>{prod.title}</td>
+                            <td>{prod.supplierName}</td>
+                            <td>{prod.stock}</td>
+                            <td className="text-center">
+                              {prod.categoriesName}
+                            </td>
+                            <td className="text-center">${prod.price}</td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td>No hay productos</td>
+                      </tr>
+                    )}
                   </tbody>
                 </Table>
               </CardBody>
